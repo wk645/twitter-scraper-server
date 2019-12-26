@@ -3,6 +3,7 @@ import Express from "express";
 import http from "http";
 import * as bodyParser from "body-parser";
 import cors from "cors";
+import TwitterService from './services/twitterService';
 
 const app = new Express();
 const httpServer = http.createServer(app);
@@ -39,6 +40,10 @@ export default class ExpressServer {
   router(routes) {
     routes(app);
     return this;
+  }
+
+  static async runTwitterJob() {
+    await TwitterService.run();
   }
 
   listen(port = defaultPort) {

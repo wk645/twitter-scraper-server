@@ -1,5 +1,9 @@
 import config from "config";
+import cron from "cron";
 const Twitter = require("twitter-node-client").Twitter;
+import ScraperService from "./scraperService";
+
+const { CronJob } = cron;
 
 const twitterConfig = {
   consumerKey: config.get("twitter.consumerKey"),
@@ -12,12 +16,27 @@ const twitterConfig = {
 const twitter = new Twitter(twitterConfig);
 
 class TwitterService {
-  async getTimeline() {
+  async run() {
+    console.log("Inside RUN");
+    this.job = new CronJob(
+      "* * * * *",
+      async () => {
+        await this.getTimeline(true);
+      },
+      null,
+      true
+    );
+  }
+
+  async getTimeline(isCronJob) {
+    console.log("Inside getTimeline()");
     return new Promise(resolve => {
       const error = err => {
         resolve(err);
       };
-      twitter.getHomeTimeline({ count: "2" }, error, data => {
+      twitter.getHomeTimeline({ count: "10" }, error, data => {
+        // console.log("DATA", data);
+        if (data && isCronJob) ScraperService.collectTweets(data);
         if (data) resolve(data);
       });
     });
