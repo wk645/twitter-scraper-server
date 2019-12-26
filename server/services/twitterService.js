@@ -11,7 +11,7 @@ const twitterConfig = {
 
 const twitter = new Twitter(twitterConfig);
 
-export class TwitterService {
+class TwitterService {
   async getTimeline() {
     return new Promise(resolve => {
       const error = err => {
@@ -20,6 +20,23 @@ export class TwitterService {
       twitter.getHomeTimeline({ count: "2" }, error, data => {
         if (data) resolve(data);
       });
+    });
+  }
+
+  async getFriendsList() {
+    return new Promise(resolve => {
+      const error = err => {
+        resolve(err);
+      };
+      const parameters = { screen_name: "mmmooyoho" };
+      twitter.getCustomApiCall(
+        "/friends/list.json",
+        parameters,
+        error,
+        data => {
+          if (data) resolve(data);
+        }
+      );
     });
   }
 }
