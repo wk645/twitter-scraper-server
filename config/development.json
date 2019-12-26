@@ -1,0 +1,11 @@
+{
+  "server": {
+    "port": 8000
+  },
+  "twitter": {
+    "consumerKey": "VeSgRCysJGsWVeLQI2cDtRL4A",
+    "consumerSecret": "c8OZwHL5LggV9a5N4NnBlcuKOeAOMXwaHy4VXpx4jIJFiYjPw2",
+    "accessTokenKey": "979584634550996993-zVZV0oht6pSrqlb714ZOexOi76BJtXI",
+    "accessTokenSecret": "SoRmxuvIaIfuRml4AQKnW2UCLvXDcwfSJaO4xnTT05gIp"
+  }
+}

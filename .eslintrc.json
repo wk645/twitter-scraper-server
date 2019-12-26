@@ -1,0 +1,43 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "prettier"
+  ],
+  "env": {
+    "es6": true,
+    "browser": false,
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["babel", "prettier"],
+  "rules": {
+    "no-var": ["error"],
+    "prefer-const": ["error"],
+    "func-names": "off",
+    "class-methods-use-this": ["off"],
+    "comma-dangle": ["error", "never"],
+    "max-len": [2, 150],
+    "no-underscore-dangle": ["off"],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false
+      }
+    ],
+    "linebreak-style": "off",
+    "prettier/prettier": "error",
+    "import/no-named-as-default": 0
+  }
+}
