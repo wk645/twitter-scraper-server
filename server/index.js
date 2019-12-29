@@ -5,4 +5,4 @@ import routes from "./routes";
 export default new Server()
   .router(routes)
   .listen(config.get("server.port"))
-  .then(() => Server.runTwitterJob());
+  // .then(() => Server.runTwitterJob());

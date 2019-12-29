@@ -4,4 +4,5 @@ import controller from "./controller";
 export default express
   .Router()
   .get("/timeline", controller.getTimeline)
-  .get("/friends", controller.getFriendsList);
+  .get("/friends", controller.getFriendsList)
+  .get("/:screenName/timeline", controller.getUserTimeline);

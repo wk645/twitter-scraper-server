@@ -1,19 +1,18 @@
 import config from "config";
 import cron from "cron";
-const Twitter = require("twitter-node-client").Twitter;
+// const Twitter = require("twitter-node-client").Twitter;
 import ScraperService from "./scraperService";
 
 const { CronJob } = cron;
 
-const twitterConfig = {
-  consumerKey: config.get("twitter.consumerKey"),
-  consumerSecret: config.get("twitter.consumerSecret"),
-  accessToken: config.get("twitter.accessTokenKey"),
-  accessTokenSecret: config.get("twitter.accessTokenSecret"),
-  callBackUrl: "http://localhost:8000/"
-};
+import Twitter from "twitter";
 
-const twitter = new Twitter(twitterConfig);
+const client = new Twitter({
+  consumer_key: config.get("twitter.consumerKey"),
+  consumer_secret: config.get("twitter.consumerSecret"),
+  access_token_key: config.get("twitter.accessTokenKey"),
+  access_token_secret: config.get("twitter.accessTokenSecret")
+});
 
 class TwitterService {
   async run() {
@@ -28,34 +27,64 @@ class TwitterService {
     );
   }
 
-  async getTimeline(isCronJob) {
+  async getTimeline() {
     console.log("Inside getTimeline()");
     return new Promise(resolve => {
-      const error = err => {
-        resolve(err);
+      const params = {
+        count: "200",
+        trim_user: true
       };
-      twitter.getHomeTimeline({ count: "10" }, error, data => {
-        // console.log("DATA", data);
-        if (data && isCronJob) ScraperService.collectTweets(data);
-        if (data) resolve(data);
+      client.get("statuses/home_timeline", params, function(error, tweets) {
+        if (!error) {
+          resolve(tweets);
+        } else {
+          resolve(error);
+        }
       });
     });
   }
 
   async getFriendsList() {
     return new Promise(resolve => {
-      const error = err => {
-        resolve(err);
-      };
-      const parameters = { screen_name: "mmmooyoho" };
-      twitter.getCustomApiCall(
-        "/friends/list.json",
-        parameters,
-        error,
-        data => {
-          if (data) resolve(data);
+      const params = { screen_name: "mmmooyoho" };
+      client.get("friends/list", params, function(error, friends) {
+        if (!error) {
+          resolve(friends);
+        } else {
+          resolve(error);
         }
-      );
+      });
+    });
+  }
+
+  async getUserTimeline(screenName) {
+    return new Promise(resolve => {
+      const params = {
+        screen_name: screenName,
+        trim_user: true,
+        count: "200",
+        include_rts: false
+      };
+      client.get("statuses/user_timeline", params, function(error, tweets) {
+        if (!error) {
+          resolve(tweets);
+        } else {
+          resolve(error);
+        }
+      });
+    });
+  }
+
+  async favoriteTweet(id) {
+    return new Promise(resolve => {
+      const params = { id };
+      client.post("favorites/create", params, function(error, tweet) {
+        if (!error) {
+          resolve(tweet);
+        } else {
+          resolve(error);
+        }
+      });
     });
   }
 }
